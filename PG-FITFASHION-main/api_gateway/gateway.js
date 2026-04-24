@@ -6,7 +6,7 @@ const cors = require('cors');
 const schema = require('./graphql/index');
 require('dotenv').config();
 const { ApolloServer } = require('@apollo/server');
-const { expressMiddleware } = require('@apollo/server/express');
+const { expressMiddleware } = require('@apollo/server/express4');
 // const { sendKafkaRequest } = require('./utils/kafkaRequest');
 const webhookRoutes = require('./routes/webhooks');
 const app = express();
@@ -19,6 +19,7 @@ const kafka = new Kafka({
     brokers: ['192.168.1.100:9092'],
     retry: { retries: 5 }
 });
+
 const producer = kafka.producer();
 const consumer = kafka.consumer({ groupId: 'gateway-listener-group' });
 
@@ -79,7 +80,7 @@ async function startGateway() {
     app.use(
         '/graphql',
         cors({
-            origin: true
+            origin: true,
             credentials: true
         }),
         express.json(),

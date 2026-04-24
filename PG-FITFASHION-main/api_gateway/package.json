@@ -11,7 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@apollo/server": "^4.11.0",
+    "@apollo/server": "^4.13.0",
     "@graphql-tools/schema": "^10.0.30",
     "amqplib": "^0.10.9",
     "body-parser": "^2.2.1",
