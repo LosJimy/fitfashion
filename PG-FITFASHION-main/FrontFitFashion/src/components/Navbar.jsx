@@ -1,4 +1,4 @@
-import { useState, useEfect } from "react";
+import { useState, useEffect } from "react";
 import UserIcon from "../assets/user.svg";
 import CartIcon from "../assets/cart.svg";
 import "./styles/Navbar.css";

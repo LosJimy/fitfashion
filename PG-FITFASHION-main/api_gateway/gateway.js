@@ -7,7 +7,7 @@ const schema = require('./graphql/index');
 require('dotenv').config();
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
-// const { sendKafkaRequest } = require('./utils/kafkaRequest');
+const { sendKafkaRequest } = require('./utils/kafkaRequest');
 const webhookRoutes = require('./routes/webhooks');
 const app = express();
 
@@ -28,7 +28,7 @@ let rabbitChannel = null;
 async function startGateway() {
     // 1. Iniciar Kafka
     await producer.connect();
-    await consumer.subscribe({ topic: 'auth-respons', fromBeginning: false });
+    await consumer.subscribe({ topic: 'auth-response', fromBeginning: false });
 
     await consumer.run({
         eachMessage: async ({ message }) => {
