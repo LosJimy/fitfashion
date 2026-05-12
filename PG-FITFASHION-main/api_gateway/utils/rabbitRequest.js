@@ -1,6 +1,6 @@
 const rabbitRequest = (channel, responseEmitter, queueName, payload) => {
   return new Promise((resolve, reject) => {
-    
+
     if (!channel) return reject(new Error("El canal de RabbitMQ no está listo"));
 
     const correlationId = Math.random().toString() + Date.now().toString();
@@ -19,7 +19,7 @@ const rabbitRequest = (channel, responseEmitter, queueName, payload) => {
 
     channel.sendToQueue(queueName, messageBuffer, {
       correlationId: correlationId,
-      replyTo: 'gateway_replies_v2' 
+      replyTo: 'gateway_replies_v3'
     });
   });
 };
