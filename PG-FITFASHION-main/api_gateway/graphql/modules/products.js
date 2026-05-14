@@ -67,12 +67,12 @@ const resolvers = {
       const { rabbitChannel, responseEmitter } = context;
 
       const response = await rabbitRequest(
-        rabbitChannel,     
-        responseEmitter,   
-        'products_queue', 
-        { 
-          pattern: 'find_all_products', 
-          data: { category: args.category } 
+        rabbitChannel,
+        responseEmitter,
+        'products_queue',
+        {
+          pattern: 'find_all_products',
+          data: { category: args.category }
         }
       );
       return response;
@@ -82,12 +82,12 @@ const resolvers = {
       const { rabbitChannel, responseEmitter } = context;
 
       const response = await rabbitRequest(
-        rabbitChannel, 
-        responseEmitter, 
-        'products_queue', 
-        { 
-          pattern: 'find_one_product', 
-          data: args.id 
+        rabbitChannel,
+        responseEmitter,
+        'products_queue',
+        {
+          pattern: 'find_one_product',
+          data: args.id
         }
       );
       return response;
@@ -96,48 +96,48 @@ const resolvers = {
 
   Mutation: {
     createProduct: async (_, { input }, context) => {
-        const { rabbitChannel, responseEmitter, role } = context;
+      const { rabbitChannel, responseEmitter, role } = context;
 
-        if (role !== 'ADMIN' && role !== 'GESTOR') {
-            throw new Error("No tienes permisos para crear productos");
-        }
+      if (role !== 'ADMIN' && role !== 'GESTOR') {
+        throw new Error("No tienes permisos para crear productos");
+      }
 
-        // 2. Enviar mensaje a RabbitMQ
-        const payload = {
-            pattern: 'create_product',
-            data: input 
-        };
+      // 2. Enviar mensaje a RabbitMQ
+      const payload = {
+        pattern: 'create_product',
+        data: input
+      };
 
-        // Enviamos a la cola 'products_queue'
-        const response = await rabbitRequest(rabbitChannel, responseEmitter, 'products_queue', payload);
-        
-        // 3. Retornar respuesta
-        return {
-            status: 'success',
-            message: 'Producto creado correctamente',
-            product_id: response.id || 'N/A'
-        };
+      // Enviamos a la cola 'products_queue'
+      const response = await rabbitRequest(rabbitChannel, responseEmitter, 'products_queue', payload);
+
+      // 3. Retornar respuesta
+      return {
+        status: 'success',
+        message: 'Producto creado correctamente',
+        product_id: response.id || 'N/A'
+      };
     },
 
     updateProduct: async (_, { id, input }, context) => {
-        const { rabbitChannel, responseEmitter, role } = context;
+      const { rabbitChannel, responseEmitter, role } = context;
 
-        if (role !== 'ADMIN' && role !== 'GESTOR') {
-            throw new Error("No tienes permisos para editar productos");
-        }
+      if (role !== 'ADMIN' && role !== 'GESTOR') {
+        throw new Error("No tienes permisos para editar productos");
+      }
 
-        const payload = {
-            pattern: 'update_product',
-            data: { id, data: input }
-        };
+      const payload = {
+        pattern: 'update_product',
+        data: { id, data: input }
+      };
 
-        const response = await rabbitRequest(rabbitChannel, responseEmitter, 'products_queue', payload);
-        
-        return {
-            status: 'success',
-            message: 'Producto actualizado correctamente',
-            product_id: response.id || id
-        };
+      const response = await rabbitRequest(rabbitChannel, responseEmitter, 'products_queue', payload);
+
+      return {
+        status: 'success',
+        message: 'Producto actualizado correctamente',
+        product_id: response.id || id
+      };
     }
   },
 };

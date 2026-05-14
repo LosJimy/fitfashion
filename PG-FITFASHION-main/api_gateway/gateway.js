@@ -16,7 +16,7 @@ const responseEmitter = new EventEmitter();
 // --- KAFKA ---
 const kafka = new Kafka({
     clientId: 'api-gateway',
-    brokers: ['192.168.1.100:9092'],
+    brokers: [process.env.KAFKA_BROKER || 'localhost:9092'],
     retry: { retries: 5 }
 });
 
@@ -41,7 +41,7 @@ async function startGateway() {
 
     // 2. Iniciar RabbitMQ
     try {
-        const rabbitUrl = 'amqp://admin:admin123@localhost:5672';
+        const rabbitUrl = process.env.RABBITMQ_URL || 'amqp://guest:guest@localhost:5672';
         const connection = await amqp.connect(rabbitUrl);
         rabbitChannel = await connection.createChannel();
         const replyQueue = 'gateway_replies_v3';

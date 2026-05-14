@@ -27,7 +27,7 @@ const typeDefs = `#graphql
         id: ID!
         total: Int!
         status: String!
-        shippingAddress: String!
+        shipping_address: String!
         order_items: [OrderItem]!
     }
 
